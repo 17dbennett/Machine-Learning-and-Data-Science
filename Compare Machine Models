@@ -1,0 +1,73 @@
+#Get file to use classes
+
+from DeckOfCards import *
+import random
+
+hand = UserHand() #declare hand to use all of the classes available. 
+
+
+
+print("----Unshuffled Deck----")
+hand.deck.print_deck() # make a deck, and print it.
+
+
+
+hand.deck.shuffle_deck() #shuffle the deck of cards and print it
+
+print("\n----shuffled Deck----")
+hand.deck.print_deck()
+# initiate game play, enter a while loop to play the game. 
+Play_game = input("\nDo you want to play black jack? [Y/N]").lower()
+
+while Play_game == "y":
+    print("Your hand is :")
+    hand.make_hand()# show their hand of 2 cards
+    hand.show_hand()
+    hand.calc_hand()
+
+#Calculate the dealers hand (random int between 17 and 23) 
+    dealer_hand = random.randint(17,23)
+
+#start a cycle for hitting to get a new card. 
+    keep_playing = 1
+    while keep_playing == 1:
+        hit = input("\nDo you want to hit? [Y/N]").lower()
+        if hit == "y":
+            hand.hit()
+            print("your new hand is: ")
+            hand.show_hand()
+            hand.calc_hand()
+            print(hand.value)
+            if hand.value > 21:
+                keep_playing = 0
+        else:
+            keep_playing = 0
+            Play_game = "n"
+            
+# when the player no longer wants to hit, calculate results.  User value is scored first.           
+    print("\n---Results----")
+    if hand.value > 21: # user busts if over 21
+        print("User busts")
+    elif hand.value > dealer_hand: #user wins if their value is over the dealers value
+            print("User wins")
+        
+    elif hand.value == dealer_hand: # tie for equal scores
+        print("Tie")
+        
+    elif dealer_hand > 21: # dealer busts
+        print("The dealer busts, The user wins")
+        
+    elif dealer_hand > hand.value: # dealer wins
+        print("The dealer wins")
+    print("The dealers score :", dealer_hand)
+    
+    #ask the user to play again. 
+    Restart = input("\nDo you want to play again? [Y/N]").lower()
+    if Restart == "y":
+        hand.clear_hand() # clear the hand and value
+        hand.deck.shuffle_deck()# shuffle a new deck
+        print("--New Shuffled Deck --") # print the deck
+        hand.deck.print_deck()
+        Play_game = "y" # re-enter the playing game loop
+        keep_playing = 1
+        print("\n\n--NEW GAME--") # let the user know its a new game. 
